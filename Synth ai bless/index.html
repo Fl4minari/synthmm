@@ -1,0 +1,302 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <title>UCC Synth Layout</title>
+    <!-- Подключаем аудио-библиотеку -->
+    <script src="https://cloudflare.com"></script>
+    <style>
+      body {
+        background-color: #1a1a1a;
+        color: #fff;
+        font-family: sans-serif;
+        margin: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        user-select: none;
+      }
+
+      .synth-frame {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 60px;
+        width: 950px;
+        padding: 40px;
+        background-color: #111;
+        position: relative;
+      }
+
+      .global-controls {
+        position: absolute;
+        top: 40px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 30px;
+        text-align: center;
+        z-index: 10;
+      }
+
+      .control-column {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .menu-btn {
+        background: none;
+        border: none;
+        color: #888;
+        font-weight: bold;
+        cursor: pointer;
+        text-transform: uppercase;
+        font-size: 13px;
+        letter-spacing: 1px;
+      }
+
+      .osc-column {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 25px;
+        margin-top: 20px;
+      }
+
+      .eye-display {
+        width: 210px;
+        height: 110px;
+        border-radius: 50%;
+        border: 2px solid #444;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .eye-core {
+        width: 35px;
+        height: 65px;
+        background-color: #333;
+      }
+
+      .osc-title {
+        text-transform: uppercase;
+        font-weight: bold;
+        letter-spacing: 1px;
+        font-size: 16px;
+        margin-top: -5px;
+      }
+
+      /* Горизонтальный ряд для всех слайдеров, включая громкость */
+      .slider-row {
+        display: flex;
+        align-items: center;
+        width: 90%;
+        gap: 15px;
+      }
+
+      .status-dot {
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        background-color: #333;
+      }
+
+      .line-range {
+        flex-grow: 1;
+        height: 4px;
+        background: #333;
+        outline: none;
+        border: none;
+        -webkit-appearance: none;
+        appearance: none;
+      }
+
+      /* Синий цвет активной дорожки ползунка как на твоем скриншоте */
+      .line-range::-webkit-slider-runnable-track {
+        background: #333;
+        height: 4px;
+      }
+
+      .line-range::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: #4488ff;
+        cursor: pointer;
+        margin-top: -4px;
+      }
+
+      .param-label {
+        font-size: 11px;
+        text-transform: uppercase;
+        color: #777;
+        letter-spacing: 1px;
+        margin-top: -15px;
+      }
+
+      .wave-selectors {
+        display: flex;
+        justify-content: space-between;
+        width: 80%;
+        margin: 5px 0;
+      }
+
+      .shape-box {
+        width: 42px;
+        height: 42px;
+        background-color: #252525;
+        cursor: pointer;
+        border-radius: 4px;
+      }
+
+      .bottom-fx {
+        display: flex;
+        gap: 40px;
+        margin-top: 15px;
+      }
+
+      .fx-knob-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 5px;
+      }
+
+      .knob-element {
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        background-color: #252525;
+        border: 2px solid #444;
+        position: relative;
+        cursor: pointer;
+        transform: rotate(0deg);
+        transition: transform 0.05s linear;
+      }
+
+      .knob-pointer {
+        width: 3px;
+        height: 15px;
+        background-color: #555;
+        position: absolute;
+        top: 0;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="synth-frame">
+      <div class="global-controls">
+        <div class="control-column">
+          <button class="menu-btn">Start</button>
+          <button class="menu-btn">Mute</button>
+          <button class="menu-btn">Stop</button>
+        </div>
+        <div class="control-column">
+          <button class="menu-btn">Start</button>
+          <button class="menu-btn">Mute</button>
+          <button class="menu-btn">Stop</button>
+        </div>
+      </div>
+
+      <!-- ЛЕВЫЙ КАНАЛ: OSCILATOR 1 -->
+      <div class="osc-column">
+        <div class="eye-display"><div class="eye-core"></div></div>
+        <div class="osc-title">Oscilator 1</div>
+
+        <div class="slider-row" style="margin-top: 15px">
+          <div class="status-dot"></div>
+          <input type="range" class="line-range" min="0" max="100" value="70" />
+        </div>
+        <div class="param-label">Volume</div>
+
+        <div class="wave-selectors">
+          <div class="shape-box"></div>
+          <div class="shape-box"></div>
+          <div class="shape-box"></div>
+        </div>
+
+        <div class="slider-row">
+          <div class="status-dot"></div>
+          <input type="range" class="line-range" min="0" max="100" value="20" />
+        </div>
+        <div class="param-label">Attack</div>
+
+        <div class="slider-row">
+          <div class="status-dot"></div>
+          <input type="range" class="line-range" min="0" max="100" value="50" />
+        </div>
+        <div class="param-label">Release</div>
+
+        <div class="bottom-fx">
+          <div class="fx-knob-container">
+            <div class="knob-element" data-id="fx1-1">
+              <div class="knob-pointer"></div>
+            </div>
+            <div class="param-label" style="margin-top: 5px">FX 1</div>
+          </div>
+          <div class="fx-knob-container">
+            <div class="knob-element" data-id="fx1-2">
+              <div class="knob-pointer"></div>
+            </div>
+            <div class="param-label" style="margin-top: 5px">FX 2</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ПРАВЫЙ КАНАЛ: OSCILATOR 2 -->
+      <div class="osc-column">
+        <div class="eye-display"><div class="eye-core"></div></div>
+        <div class="osc-title">Oscilator 2</div>
+
+        <div class="slider-row" style="margin-top: 15px">
+          <div class="status-dot"></div>
+          <input type="range" class="line-range" min="0" max="100" value="70" />
+        </div>
+        <div class="param-label">Volume</div>
+
+        <div class="wave-selectors">
+          <div class="shape-box"></div>
+          <div class="shape-box"></div>
+          <div class="shape-box"></div>
+        </div>
+
+        <div class="slider-row">
+          <div class="status-dot"></div>
+          <input type="range" class="line-range" min="0" max="100" value="20" />
+        </div>
+        <div class="param-label">Attack</div>
+
+        <div class="slider-row">
+          <div class="status-dot"></div>
+          <input type="range" class="line-range" min="0" max="100" value="50" />
+        </div>
+        <div class="param-label">Release</div>
+
+        <div class="bottom-fx">
+          <div class="fx-knob-container">
+            <div class="knob-element" data-id="fx2-1">
+              <div class="knob-pointer"></div>
+            </div>
+            <div class="param-label" style="margin-top: 5px">FX 1</div>
+          </div>
+          <div class="fx-knob-container">
+            <div class="knob-element" data-id="fx2-2">
+              <div class="knob-pointer"></div>
+            </div>
+            <div class="param-label" style="margin-top: 5px">FX 2</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Связываем со вторым файлом -->
+    <script src="script.js"></script>
+  </body>
+</html>
